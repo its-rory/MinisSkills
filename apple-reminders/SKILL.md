@@ -73,7 +73,7 @@ Empty lists never appear in `list` output, because list titles are only observab
 through the reminders inside them. If the user names a list you cannot find, say it
 is either empty or nonexistent — do not create the task somewhere else and hope.
 
-**2. Compute due dates as absolute local datetimes yourself.**
+**2. Compute due dates as absolute local datetimes yourself, including explicit hours and minutes for notifications.**
 
 Accepted forms are `YYYY-MM-DD`, `YYYY-MM-DDTHH:MM`, `YYYY-MM-DDTHH:MM:SS`
 (interpreted in the device's local timezone), and full ISO 8601 with an offset or
@@ -86,10 +86,9 @@ with no due-date change and the command still exits 0. So resolve the user's
 wording into a concrete date and time before you build the command, and state the
 date you chose in your answer so a misreading is visible.
 
-Two consequences worth knowing: `YYYY-MM-DD` alone becomes 00:00 local, since this
-command has no all-day form; and `create` does not echo `due` back, so after any
-`create --due` you must read the reminder back to confirm the date actually landed.
-`update` does echo `due`, so its own response is the confirmation.
+**Crucial Notification Requirement**: To ensure iOS triggers an active push notification banner and alert sound ("叮"), you **must** supply an explicit time component (`YYYY-MM-DDTHH:MM`). Using `YYYY-MM-DD` alone defaults to `00:00` local time as a silent entry with no alert sound. If the user does not specify a time, ask for one or default to a standard time (e.g. `09:00`) with explicit time components in `--due`.
+
+Two additional consequences worth knowing: `create` does not echo `due` back, so after any `create --due` you must read the reminder back to confirm the date actually landed; `update` does echo `due`, so its own response is the confirmation.
 
 **3. Treat a truncated read as "I have not seen the data yet".**
 
@@ -224,7 +223,7 @@ not do — the honest limitation is more useful than a fake feature.
 | List emoji or color | Not exposed |
 | All-day due dates | Not exposed; a date-only value becomes 00:00 local |
 | Recurring reminders | Not exposed |
-| Alarms, location or messaging triggers | Not exposed; this command sets a due date, and whether a notification fires is up to the Reminders app |
+| Timed Alarms & Sound Notifications | Triggered automatically when `--due` includes explicit hours and minutes (`YYYY-MM-DDTHH:MM`). Date-only (`YYYY-MM-DD`) entries set to 00:00 will NOT play alert sounds. Location/messaging triggers are not supported. |
 | Listing empty lists | Not observable — list titles only appear via reminders inside them |
 | Filtering by date range or search text | Not exposed; read bounded, then filter your side |
 
