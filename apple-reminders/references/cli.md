@@ -278,9 +278,7 @@ backwards, **absolute local datetimes are the only practical form for `--due`**:
 compute `YYYY-MM-DDTHH:MM` yourself.
 
 Stored due dates keep year, month, day, hour, and minute. A date-only value
-therefore becomes 00:00 local — this command cannot create an all-day reminder. No
-`EKAlarm` is attached by any verb, so treat "a notification will fire at that time"
-as the Reminders app's behaviour, not something this command arranges.
+therefore becomes 00:00 local with no alert sound — this command cannot create an all-day reminder. To trigger an active iOS banner notification and alert sound ("叮"), `--due` **must** include explicit time components (`YYYY-MM-DDTHH:MM`). iOS EventKit automatically attaches the corresponding alert trigger to timed due dates. Date-only values default to silent midnight entries.
 
 **All-day reminders made elsewhere are indistinguishable in `list` output.** A
 reminder created in the Reminders app with a date but no time is all-day in EventKit
